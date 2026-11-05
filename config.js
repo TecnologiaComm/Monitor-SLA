@@ -6,7 +6,7 @@
 window.MONITOR_CONFIG = {
   // ID do aplicativo registrado no Microsoft Entra (Azure AD).
   // Troque pelo "Application (client) ID" do registro que você criar.
-  clientId: "COLE-AQUI-O-CLIENT-ID",
+  clientId: "9ff07a0f-8433-4cbe-a1a9-80b96374df67",
 
   // ID do tenant da Comm (Microsoft Entra > Visão geral > Tenant ID).
   tenantId: "0760b291-f27e-4201-ab06-3e7e68daa846",
