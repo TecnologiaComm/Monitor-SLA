@@ -18,7 +18,12 @@ Painel web estático (GitHub Pages) que lê a caixa **infra@commcenter.com.br** 
 | Urgência ⚡ | assunto/resumo com urgente, prazo, hoje, escalonamento, crítico, bloqueio, multa, parado, sem acesso, down, inoperante → sobe um nível |
 | Tipo | Incidente/Link indisponível, Validação Elétrica, Faturamento/VGR, Serviços Digitais, Operacional/Outros |
 | Ignorados | avisos automáticos (`vivob2b@service-now.com`, `postmaster@...`) não contam como última resposta |
+| Prováveis encerradas | última mensagem com obrigado, validado, normalizado, restabelecido, resolvido, encerrado → sai dos indicadores e vai para uma lista de conferência |
+| Dispensar | esconde uma conversa (só no seu navegador) até chegar mensagem nova nela |
+| Chamado | coluna própria com o número do incidente (INC…) aberto pela Telefônica/Vivo; sem INC, usa o protocolo CS…. Se o número não estiver no resumo do e-mail, o painel lê o corpo das mensagens da Telefônica/Vivo (ignorando o histórico citado) e guarda só o número em cache. Também entra na busca, no CSV e no resumo |
 | Atualização | automática a cada 5 min com a aba aberta; alertas do navegador para novas conversas CRÍTICA/ESCALAR |
+| Copiar resumo | gera um texto pronto para colar no Teams/WhatsApp com os 10 itens mais urgentes |
+| Painel de TV | tela cheia só com os indicadores e prioridades, para deixar num monitor da equipe |
 
 Tudo isso é ajustável em `config.js`.
 

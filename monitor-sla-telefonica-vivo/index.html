@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monitor SLA Telefônica/Vivo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23c2410c'/%3E%3Cpath d='M16 8v9l6 3' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot" aria-hidden="true"></span>
+      <div>
+        <h1>Monitor SLA Telefônica/Vivo</h1>
+        <p class="sub" id="sub">Caixa monitorada: <strong id="mbx"></strong></p>
+      </div>
+    </div>
+    <div class="actions">
+      <span class="meta" id="lastRun"></span>
+      <button id="btnNotif" class="ghost" hidden>Ativar alertas</button>
+      <button id="btnRefresh" hidden>Atualizar</button>
+      <button id="btnLogin">Entrar com Microsoft</button>
+      <button id="btnLogout" class="ghost" hidden>Sair</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="setup" class="notice" hidden>
+      <h2>Configuração pendente</h2>
+      <p>Edite o arquivo <code>config.js</code> e informe o <code>clientId</code> do aplicativo registrado no Microsoft Entra. O passo a passo está no <code>README.md</code>.</p>
+      <p>Enquanto isso, você pode ver como o painel funciona com dados fictícios.</p>
+      <button id="btnDemoSetup">Ver demonstração</button>
+    </section>
+
+    <section id="welcome" class="notice" hidden>
+      <h2>Entre para começar</h2>
+      <p>O painel lê a caixa <strong id="mbx2"></strong> direto do Microsoft 365, no seu navegador. Nenhum e-mail é enviado para outro lugar e nada é alterado.</p>
+      <button id="btnLogin2">Entrar com Microsoft</button>
+      <button id="btnDemo" class="ghost">Ver demonstração</button>
+    </section>
+
+    <div id="error" class="error" role="alert" hidden></div>
+    <div id="demoBanner" class="demo" hidden>Modo demonstração — dados fictícios.</div>
+
+    <section id="dash" hidden>
+      <div class="kpis" id="kpis"></div>
+
+      <div class="filters">
+        <input id="fText" type="search" placeholder="Buscar assunto, remetente...">
+        <select id="fStatus">
+          <option value="">Todos os status</option>
+          <option value="comm">Aguardando resposta da Comm</option>
+          <option value="parceiro">Aguardando Telefônica/Vivo</option>
+        </select>
+        <select id="fTipo"><option value="">Todos os tipos</option></select>
+        <label class="chk"><input type="checkbox" id="fAll"> Mostrar abaixo de <span id="limH"></span>h</label>
+        <button id="btnCsv" class="ghost">Exportar CSV</button>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Nível</th><th>Assunto</th><th>Última msg de</th><th>Tipo</th>
+              <th>Status</th><th class="num">Horas</th><th>Desde</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <p id="empty" class="empty" hidden></p>
+      </div>
+      <p class="foot" id="foot"></p>
+    </section>
+  </main>
+
+  <script src="vendor/msal-browser.min.js"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

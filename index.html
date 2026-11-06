@@ -4,75 +4,114 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Monitor SLA Telefônica/Vivo</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23c2410c'/%3E%3Cpath d='M16 8v9l6 3' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23141414'/%3E%3Cpath d='M16 9v8l5 3' stroke='%23f2b521' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <span class="dot" aria-hidden="true"></span>
+  <aside class="sidebar" id="sidebar">
+    <div class="logo"><span class="logo-dot">°</span>comm<span class="logo-tag">SLA</span></div>
+    <nav id="nav">
+      <a href="#" data-nav="inicio" class="active"><i data-i="home"></i>Início</a>
+      <a href="#" data-nav="conversas"><i data-i="chat"></i>Conversas</a>
+      <a href="#" data-nav="comm"><i data-i="user"></i>Aguardando a Comm</a>
+      <a href="#" data-nav="parceiro"><i data-i="antenna"></i>Aguardando Vivo</a>
+      <a href="#" data-nav="encerradas"><i data-i="check"></i>Prováveis encerradas</a>
+      <a href="#" data-nav="dispensadas"><i data-i="eyeoff"></i>Dispensadas</a>
+      <p class="nav-sec">GESTÃO</p>
+      <a href="#" data-nav="tv"><i data-i="tv"></i>Painel de TV</a>
+      <a href="#" data-nav="csv"><i data-i="download"></i>Exportar CSV</a>
+    </nav>
+    <div class="me" id="me" hidden>
+      <div class="me-row"><span class="avatar" id="avatar">--</span><div><strong id="meName"></strong><small id="meMail"></small></div></div>
+      <a href="#" id="btnLogout"><i data-i="logout"></i>Sair</a>
+    </div>
+  </aside>
+
+  <div class="page">
+    <header class="hero">
       <div>
-        <h1>Monitor SLA Telefônica/Vivo</h1>
-        <p class="sub" id="sub">Caixa monitorada: <strong id="mbx"></strong></p>
+        <h1 id="greet">Monitor SLA Telefônica/Vivo</h1>
+        <p id="heroSub">Caixa monitorada: <strong id="mbx"></strong></p>
       </div>
+      <label class="search"><i data-i="search"></i><input id="fText" type="search" placeholder="Buscar assunto, loja, chamado (CS/INC), remetente..."><kbd>Ctrl K</kbd></label>
+    </header>
+
+    <div class="quick" id="quick">
+      <button class="q primary" id="btnRefresh"><span class="qi"><i data-i="refresh"></i></span>Atualizar agora</button>
+      <button class="q" id="btnCopy"><span class="qi"><i data-i="copy"></i></span>Copiar resumo</button>
+      <button class="q" id="btnCsv"><span class="qi"><i data-i="download"></i></span>Exportar CSV</button>
+      <button class="q" id="btnNotif"><span class="qi"><i data-i="bell"></i></span>Ativar alertas</button>
+      <button class="q" id="btnTv"><span class="qi"><i data-i="tv"></i></span>Painel de TV</button>
     </div>
-    <div class="actions">
-      <span class="meta" id="lastRun"></span>
-      <button id="btnNotif" class="ghost" hidden>Ativar alertas</button>
-      <button id="btnRefresh" hidden>Atualizar</button>
-      <button id="btnLogin">Entrar com Microsoft</button>
-      <button id="btnLogout" class="ghost" hidden>Sair</button>
-    </div>
-  </header>
 
-  <main>
-    <section id="setup" class="notice" hidden>
-      <h2>Configuração pendente</h2>
-      <p>Edite o arquivo <code>config.js</code> e informe o <code>clientId</code> do aplicativo registrado no Microsoft Entra. O passo a passo está no <code>README.md</code>.</p>
-      <p>Enquanto isso, você pode ver como o painel funciona com dados fictícios.</p>
-      <button id="btnDemoSetup">Ver demonstração</button>
-    </section>
+    <main>
+      <section id="setup" class="notice" hidden>
+        <h2>Configuração pendente</h2>
+        <p>Informe o <code>clientId</code> em <code>config.js</code> (veja o README). Enquanto isso, veja o painel com dados fictícios.</p>
+        <button class="btn" id="btnDemoSetup">Ver demonstração</button>
+      </section>
+      <section id="welcome" class="notice" hidden>
+        <h2>Entre para começar</h2>
+        <p>O painel lê a caixa <strong id="mbx2"></strong> direto do Microsoft 365, no seu navegador. Nada é alterado e nenhum e-mail sai daqui.</p>
+        <button class="btn" id="btnLogin">Entrar com Microsoft</button>
+        <button class="btn ghost" id="btnDemo">Ver demonstração</button>
+      </section>
+      <div id="error" class="error" role="alert" hidden></div>
+      <div id="demoBanner" class="demo" hidden>Modo demonstração — dados fictícios.</div>
 
-    <section id="welcome" class="notice" hidden>
-      <h2>Entre para começar</h2>
-      <p>O painel lê a caixa <strong id="mbx2"></strong> direto do Microsoft 365, no seu navegador. Nenhum e-mail é enviado para outro lugar e nada é alterado.</p>
-      <button id="btnLogin2">Entrar com Microsoft</button>
-      <button id="btnDemo" class="ghost">Ver demonstração</button>
-    </section>
+      <div id="dash" class="layout" hidden>
+        <div class="col-main">
+          <h3 class="sec">SLA <span class="sec-hint">conversas sem resposta há +<span class="limH"></span>h</span></h3>
+          <div class="grid" id="gSla"></div>
 
-    <div id="error" class="error" role="alert" hidden></div>
-    <div id="demoBanner" class="demo" hidden>Modo demonstração — dados fictícios.</div>
+          <h3 class="sec">RESPONSABILIDADE</h3>
+          <div class="grid" id="gResp"></div>
 
-    <section id="dash" hidden>
-      <div class="kpis" id="kpis"></div>
+          <h3 class="sec">POR TIPO</h3>
+          <div class="grid" id="gTipo"></div>
 
-      <div class="filters">
-        <input id="fText" type="search" placeholder="Buscar assunto, remetente...">
-        <select id="fStatus">
-          <option value="">Todos os status</option>
-          <option value="comm">Aguardando resposta da Comm</option>
-          <option value="parceiro">Aguardando Telefônica/Vivo</option>
-        </select>
-        <select id="fTipo"><option value="">Todos os tipos</option></select>
-        <label class="chk"><input type="checkbox" id="fAll"> Mostrar abaixo de <span id="limH"></span>h</label>
-        <button id="btnCsv" class="ghost">Exportar CSV</button>
+          <h3 class="sec" id="secConv">CONVERSAS</h3>
+          <div class="filters">
+            <span class="chip" id="chip" hidden></span>
+            <select id="fStatus">
+              <option value="">Todos os status</option>
+              <option value="comm">Aguardando a Comm</option>
+              <option value="parceiro">Aguardando Telefônica/Vivo</option>
+            </select>
+            <select id="fTipo"><option value="">Todos os tipos</option></select>
+            <label class="chk"><input type="checkbox" id="fAll"> Incluir abaixo de <span class="limH"></span>h</label>
+          </div>
+          <div class="tablewrap">
+            <table>
+              <thead><tr><th>Nível</th><th>Chamado</th><th>Assunto</th><th>Status · última msg</th><th class="num">Sem resposta</th></tr></thead>
+              <tbody id="rows"></tbody>
+            </table>
+            <p id="empty" class="empty" hidden></p>
+          </div>
+          <p class="foot" id="foot"></p>
+        </div>
+
+        <div class="col-side">
+          <div class="panel">
+            <h4>Prioridades agora</h4>
+            <div class="bar"><span id="barFill"></span></div>
+            <ol class="plist" id="plist"></ol>
+          </div>
+          <div class="panel">
+            <h4>Prováveis encerradas <span class="count" id="cClosed">0</span></h4>
+            <p class="muted small">Última mensagem foi agradecimento, validação ou aviso de normalização. Confira e dispense.</p>
+            <ul class="plist" id="clist"></ul>
+          </div>
+          <div class="panel">
+            <h4>Status da coleta</h4>
+            <p class="muted small" id="runInfo">—</p>
+          </div>
+        </div>
       </div>
+    </main>
+  </div>
 
-      <div class="tablewrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Nível</th><th>Assunto</th><th>Última msg de</th><th>Tipo</th>
-              <th>Status</th><th class="num">Horas</th><th>Desde</th><th></th>
-            </tr>
-          </thead>
-          <tbody id="rows"></tbody>
-        </table>
-        <p id="empty" class="empty" hidden></p>
-      </div>
-      <p class="foot" id="foot"></p>
-    </section>
-  </main>
+  <div class="toast" id="toast" hidden></div>
 
   <script src="vendor/msal-browser.min.js"></script>
   <script src="config.js"></script>
