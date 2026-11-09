@@ -13,7 +13,7 @@ window.MONITOR_CONFIG = {
 
   // Caixa de correio monitorada (compartilhada). O usuário que faz login
   // precisa ter permissão de leitura nela (Acesso Total / Full Access).
-  mailbox: "infra@commcenter.com.br",
+  mailbox: "refreitas@commcenter.com.br",
 
   // Remetentes/destinatários monitorados.
   parceiros: [
@@ -38,6 +38,16 @@ window.MONITOR_CONFIG = {
   // Palavras que sobem um nível e marcam com ⚡ (assunto ou resumo).
   palavrasUrgencia: ["urgente", "prazo", "hoje", "escalonamento", "crítico", "critico",
     "bloqueio", "multa", "parado", "sem acesso", "down", "inoperante"],
+
+  // Se a última mensagem tiver estas palavras, a conversa vai para
+  // "Prováveis encerradas" e sai dos indicadores de SLA.
+  separarEncerradas: true,
+  palavrasEncerramento: ["obrigad", "agradeço", "agradecemos", "validado", "normalizado", "normalizada",
+    "restabelecid", "resolvido", "encerrad", "encerramento"],
+
+  // Quando o nº do incidente (INC/CS) não aparece no resumo do e-mail, o painel
+  // abre o corpo das mensagens da Telefônica/Vivo para encontrá-lo (máx. por atualização).
+  maxCorposPorAtualizacao: 40,
 
   // Atualização automática (minutos). 0 = só manual.
   atualizarACadaMin: 5,
